@@ -870,3 +870,109 @@ function stringToSignedInteger(string) {
       return stringToInteger(string);
   }
 }
+
+var startingBalance = 1;
+var chicken = 5;
+var chickenQuantity = 7;
+
+var totalPayable = function (item, quantity) {
+  return startingBalance + (item * quantity);
+};
+
+startingBalance = 5;
+console.log(totalPayable(chicken, chickenQuantity)); // 40
+
+startingBalance = 10;
+console.log(totalPayable(chicken, chickenQuantity)); // 45
+
+// functions are closures: they retain access to the variables that
+// were in scope at the time of function definition. moreover, functions have
+// live access to the value of those variables: that is, the current values of
+// those variables at the time of function invocation are visible to the
+// function.
+
+// doubler
+
+function doubler(number, caller) {
+  console.log('This function was called by ' + caller + '.');
+  return number + number;
+}
+
+doubler(5, 'Victor');                   // returns 10
+// logs:
+// This function was called by Victor.
+
+
+function makeDoubler(caller) {
+  return function doubler(number) {
+    console.log('This function was called by ' + caller + '.');
+    return number + number;
+  }
+}
+
+var benDoubler = makeDoubler('Ben');
+console.log(benDoubler(5));
+
+var array = ['Apples', 'Peaches', 'Grapes'];
+
+array[3.4] = 'Oranges';
+console.log(array.length); // 3
+console.log(Object.keys(array).length); // 4
+
+array[-2] = 'Watermelon';
+console.log(array.length); // 3
+console.log(Object.keys(array).length); // 5
+
+// 918 and 922 assign values to the array keys `'3.4'` and `'-2'`. However, these key value pairs are not array elements! This shows in the fact that they do not count towards the length of the array (919/923). They do, however, count towards the number of properties (920/924).
+
+var languages = ['JavaScript', 'Ruby', 'Python'];
+console.log(languages); // [js, r, p]
+console.log(languages.length); // 3
+
+languages.length = 4;
+console.log(languages); // [js, r, p, empty ]
+console.log(languages.length); // 4
+
+languages.length = 1;
+console.log(languages); // [js]
+console.log(languages.length); 1
+
+languages.length = 3;
+console.log(languages); // [js, empty, empty]
+console.log(languages.length); // 3
+
+languages.length = 1;
+languages[2] = 'Python';
+console.log(languages); // [js, empty, python]
+console.log(languages[1]); // undefined
+console.log(languages.length); // 3
+
+// The Red Pill
+
+function one() {
+  function log(result) {
+    console.log(result);
+  }
+
+  function anotherOne() {
+    var result = '';
+    var i;
+    for (i = 0; i < arguments.length; i += 1) {
+      result += String.fromCharCode(arguments[i]);
+    }
+
+    log(result);
+  }
+
+  function anotherAnotherOne() {
+    console.log(String.fromCharCode(87, 101, 108, 99, 111, 109, 101));
+    // console.log('Welcome')
+    anotherOne(116, 111); // t o
+  }
+
+  anotherAnotherOne(); // 'Welcome' (newline) 'to'
+  anotherOne(116, 104, 101); // 'the'
+  return anotherOne; // 'Matrix!'
+}
+
+one()(77, 97, 116, 114, 105, 120, 33);
